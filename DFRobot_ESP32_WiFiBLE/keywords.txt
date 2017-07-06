@@ -1,0 +1,30 @@
+#######################################
+# Syntax Coloring Map For Bridge
+#######################################
+
+####################################### 
+# Datatypes (KEYWORD1)
+#######################################
+
+DFRobot_ESP32_BLE	KEYWORD1	DFRobot_ESP32_BLE
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################	
+
+setService		KEYWORD2
+setCharacteristic	KEYWORD2
+setconnummax		KEYWORD2
+setconnectname0		KEYWORD2
+setconnectname1		KEYWORD2
+setconnectname2		KEYWORD2
+setconnectname3		KEYWORD2
+init			KEYWORD2
+readdata		KEYWORD2
+writedata		KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
