@@ -66,9 +66,9 @@ Example:
     char dataName[15] = {'\0'};
     String bledata = ble.readdata(dataName);
 
-* @n [Get the module here](等上架后添加商品购买链接)
+* @n [Get the module here](https://www.dfrobot.com/product-1590.html)
 * @n This example Set the volume size and play music snippet.
-* @n [Connection and Diagram](等上架后添加wiki链接)
+* @n [Connection and Diagram](https://www.dfrobot.com/wiki/index.php/FireBeetle_ESP32_IOT_Microcontroller_(Supports_Wi-Fi_%26_Bluetooth)_SKU:_DFR0478)
 *
 * Copyright	[DFRobot](http://www.dfrobot.com), 2016
 * Copyright	GNU Lesser General Public License
