@@ -10,9 +10,10 @@ The library is instantiated as an object with BLE provided to read and write dat
   DFRobot_ESP32_BLE ble;
   
 ## void setService(uint16_t ser)
-Setting up peripheral service ID.
+   Setting up peripheral service ID.
 
 Example:
+
    ble.setService(0xdfb0);
 
 0xdfb0 is the serive ID for Bluno, so you can connect Bluno.
@@ -21,6 +22,7 @@ Example:
 Setting up peripheral Characteristic.
 
 Example:
+
    ble.setCharacteristic(0xdfb1);
 
 0xdfb0 is the Characteristic number for Bluno, so you can connect Bluno.
@@ -29,6 +31,7 @@ Example:
 Sets the number of connections from the machine
 
 Example:
+
    ble.setconnummax(2);
 
 The max conncect number is 2.
@@ -37,6 +40,7 @@ The max conncect number is 2.
 Setting up peripheral's name,which serive will connected.
 
 Example:
+
    ble.setconnectname0("Bluno0");
 
 
@@ -44,18 +48,21 @@ Example:
 Initalize ESP32 BLE device.
 
 Example:
+
    ble.init();
    
 ## void begin()
 Start running Bluetooth device
 
 Example:
+
    ble.begin();
 
 ## String readdata(char *buf)
 Read data from BLE.
 
 Example:
+
    char dataName[15] = {'\0'};
    String bledata = ble.readdata(dataName);
 
