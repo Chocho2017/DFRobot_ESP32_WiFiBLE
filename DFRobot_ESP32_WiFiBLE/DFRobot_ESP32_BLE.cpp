@@ -83,8 +83,20 @@ static String connectname0="";
 static String connectname1="";
 static String connectname2="";
 static String connectname3="";
+static bool connected0 = false;
+static bool connected1 = false;
+static bool connected2 = false;
+static bool connected3 = false;
+static bool EQname0 = false;
+static bool EQname1 = false;
+static bool EQname2 = false;
+static bool EQname3 = false;
+static bool boolconnected = false;
+static bool bool_initdone = false;
+uint8_t esp32scanname[15];
 static uint8_t connummax = 4;
 static uint8_t conn_num = 0;
+static uint8_t scannamelen = 0;
 static esp_ble_scan_params_t ble_scan_params = {
     .scan_type              = BLE_SCAN_TYPE_ACTIVE,
     .own_addr_type          = BLE_ADDR_TYPE_PUBLIC,
@@ -216,14 +228,14 @@ static void gattc_profile_a_event_handler(esp_gattc_cb_event_t event, esp_gatt_i
         conn_id = p_data->open.conn_id;
         memcpy(gl_profile_tab[PROFILE_A_APP_ID].remote_bda, p_data->open.remote_bda, sizeof(esp_bd_addr_t));
         esp_ble_gattc_search_service(gattc_if, conn_id, NULL);
+		boolconnected = true;
 		#ifdef dbg
+		ESP_LOGE(GATTC_TAG, "ESP_GATTC_OPEN_EVT_id:#############\n");
 		ESP_LOGE(GATTC_TAG, "ESP_GATTC_OPEN_EVT_id:%d\n",conn_id);
 		#endif
 		ble_name_idEequeue(p_data->open.remote_bda,conn_id);
-		//连接id入队
 		mygattc_if = gattc_if;
 		if(connummax > conn_num){
-			esp_ble_gap_start_scanning(30);
 		}
         break;
     case ESP_GATTC_SEARCH_RES_EVT: {
@@ -313,8 +325,9 @@ static void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
     switch (event) {
     case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT: {
         //the unit of the duration is second
-        uint32_t duration = 30;
-        esp_ble_gap_start_scanning(duration);
+        //uint32_t duration = 30;
+        //esp_ble_gap_start_scanning(duration);
+		bool_initdone = true;
 
 
         break;
@@ -333,68 +346,71 @@ static void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
         case ESP_GAP_SEARCH_INQ_RES_EVT:
             adv_name = esp_ble_resolve_adv_data(scan_result->scan_rst.ble_adv,
                                                 ESP_BLE_AD_TYPE_NAME_CMPL, &adv_name_len);
-
+			scannamelen = adv_name_len;
             if (adv_name != NULL) {
+				//ESP_LOGE(GATTC_TAG, "adv_namedone=%s\n",adv_name);
+				memcpy(esp32scanname,(char *)adv_name,adv_name_len);
                 //if (strlen(device_name) == adv_name_len && strncmp((char *)adv_name, device_name, adv_name_len) ==0) {
 				if (strncmp((char *)adv_name, connectname0.c_str(), connectname0.length()) == 0){
 					#ifdef dbg
 					ESP_LOGE(GATTC_TAG, "adv_namedone");
 					#endif
-					ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname0.c_str(),connectname0.length());
-                    if (connect == false) {
+					connected0 = true;
+					if(!EQname0){
+						ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname0.c_str(),connectname0.length());
+						EQname0 = true;
+					}
+					
+					if (connect == false) {
 						conn_num++;
                         connect = true;
-                        esp_ble_gap_stop_scanning();
-                        esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
                     }else{
 						conn_num++;
-						esp_ble_gap_stop_scanning();
-						esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
 					}
                 }else if(strncmp((char *)adv_name, connectname1.c_str(), connectname1.length()) == 0){
 					#ifdef dbg
 					ESP_LOGE(GATTC_TAG, "connectname1\n");
 					#endif
-					ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname1.c_str(),connectname1.length());
-                    if (connect == false) {
+					connected1 =true;
+					if(!EQname1){
+						ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname1.c_str(),connectname1.length());
+						EQname1 = true;
+					}
+					if (connect == false) {
 						conn_num++;
                         connect = true;
-                        esp_ble_gap_stop_scanning();
-                        esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
                     }else{
 						conn_num++;
-						esp_ble_gap_stop_scanning();
-						esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
 					}
 				}else if(strncmp((char *)adv_name, connectname2.c_str(), connectname2.length()) == 0){
 					#ifdef dbg
 					ESP_LOGE(GATTC_TAG, "connectname2\n");
 					#endif
-					ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname2.c_str(),connectname2.length());
-                    if (connect == false) {
+					connected2 = true;
+					if(!EQname2){
+						ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname2.c_str(),connectname2.length());
+						EQname2 = true;
+					}
+					if (connect == false) {
 						conn_num++;
                         connect = true;
-                        esp_ble_gap_stop_scanning();
-                        esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
                     }else{
 						conn_num++;
-						esp_ble_gap_stop_scanning();
-						esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
 					}
 				}else if(strncmp((char *)adv_name, connectname3.c_str(), connectname3.length()) == 0){
 					#ifdef dbg
 					ESP_LOGE(GATTC_TAG, "connectname3\n");
 					#endif
-					ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname3.c_str(),connectname3.length());
+					connected3 = true;
+					if(!EQname3){
+						ble_name_Enqueue(scan_result->scan_rst.bda, 6, (char*)connectname3.c_str(),connectname3.length());
+						EQname3 = true;
+					}
                     if (connect == false) {
 						conn_num++;
                         connect = true;
-                        esp_ble_gap_stop_scanning();
-                        esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
                     }else{
 						conn_num++;
-						esp_ble_gap_stop_scanning();
-						esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, true);
 					}
 				}
             }
@@ -513,7 +529,7 @@ void bluno2_ble_evt_task(void *arg)
 	gattc_client_test(); 
 	while(1){
 		wifi_data_ble_dequeue();
-		vTaskDelay(10);
+		vTaskDelay(1);
         /*Read timer value from task*/
 		//ESP_LOGI(GATTC_TAG, "bluno2_ble_evt_task");
 	}
@@ -576,6 +592,22 @@ void DFRobot_ESP32_BLE::begin()
 {
 	xTaskCreate(bluno2_ble_evt_task, "ble_evt_task", 2048, NULL, 5, NULL);
 }
+
+bool DFRobot_ESP32_BLE::initdone()
+{
+	return bool_initdone;
+}
+
+void DFRobot_ESP32_BLE::scan()
+{
+	esp_ble_gap_start_scanning(30);//搜索30s
+}
+
+void DFRobot_ESP32_BLE::stop_scan()
+{
+	esp_ble_gap_stop_scanning();
+}
+
 static uint16_t getid(const char *name)
 {
 	uint16_t id =0;
@@ -588,6 +620,28 @@ static uint16_t getid(const char *name)
 static char* getname(uint16_t conn_id)
 {
 	return getname_Dequeue(conn_id);
+}
+
+static uint8_t * getmac(const char *name)
+{
+	return getmac_Dequeue(name);
+}
+
+static bool first = true;
+bool DFRobot_ESP32_BLE::connected(const char *name)
+{
+	if(first){
+		uint8_t *mac;
+		mac = getmac(name);
+		
+		boolconnected = false;
+		esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, mac, true);
+		first = false;
+	}
+	if(boolconnected){
+		first = true;
+	}
+	return boolconnected;
 }
 
 String DFRobot_ESP32_BLE::readdata(char *name)
@@ -606,6 +660,52 @@ String DFRobot_ESP32_BLE::readdata(char *name)
 		free(p);
 	}
     return ret;
+}
+
+String DFRobot_ESP32_BLE::scanname(void)
+{
+	String ret = "";
+	if(esp32scanname[0] != '\0'){
+		for(int i = 0;i<scannamelen;i++){
+			ret += (char)esp32scanname[i];
+		}
+		esp32scanname[0] = '\0';
+		return ret;
+	}
+	return ret;
+}
+
+bool DFRobot_ESP32_BLE::status(String str)
+{
+	/*
+	bool ret = false;
+	switch(str){
+	case connectname0:
+		if(connected0){
+			ret = true;
+		}
+		break;
+	case connectname1:
+		if(connected1){
+			ret = true;
+		}
+		break;
+	case connectname2:
+		if(connected2){
+			ret = true;
+		}
+		break;
+	case connectname3:
+		if(connected3){
+			ret = true;
+		}
+		break;
+	default :
+		ret = false;
+		break;
+	}
+	*/
+	return 0;//ret;
 }
 
 

@@ -3,7 +3,7 @@
  * @brief DFRobot's Connect ESP32 to Bluetooth
  * @n This example is through the ESP32 to connect to Bluetooth and WIFI through TCP connection and achieve Bluetooth and TCP SERVER communication
  *
- * @copyright	[DFRobot](https://www.dfrobot.com/product-1590.html), 2017
+ * @copyright	[DFRobot](http://www.dfrobot.com), 2017
  * @copyright	GNU Lesser General Public License
  * @author [Wuxiao](xiao.wu@dfrobot.com)
  * @version  V0.1
@@ -25,11 +25,40 @@ void setup()
 	  ble.setService(ServiceUuid);
 	  ble.setCharacteristic(CharacteristicUuid);
     ble.setconnummax(1);
-	  ble.setconnectname0("Bluno0");
+	  ble.setconnectname0("BLE-Link");
   	ble.init();
     delay(50);
     ble.begin();
-	
+    Serial.print("ble begin...");
+    while(!ble.initdone()){
+      delay(100);
+      Serial.print(".");
+    }
+    Serial.println();
+    ble.scan();
+   Serial.print("ble scan...");
+   Serial.println();
+	  while(1){
+    String scanName = ble.scanname();
+    if(scanName.length() > 0){
+      Serial.print("ScanName:");
+      Serial.println(scanName);
+      if(scanName == "BLE-Link"){
+        ble.stop_scan();
+        delay(10);
+        Serial.print("Connect BLE-Link...");
+        while(!ble.connected("BLE-Link")){
+          Serial.print(".");
+          delay(100);
+          }
+          Serial.println("Connect success");
+          break;
+      }
+    }else{
+      Serial.print(".");
+      delay(100);
+    }
+  }
     WiFi.begin("hitest", "12345678");
     Serial.println();
     Serial.println();

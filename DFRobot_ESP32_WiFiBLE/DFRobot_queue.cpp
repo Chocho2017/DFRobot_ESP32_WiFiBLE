@@ -205,6 +205,8 @@ uint16_t getid_Dequeue(const char *name)
 		ESP_LOGE("getid_Dequeue","p->name=%s\n",p->name);
 		ESP_LOGE("getid_Dequeue","name=%d\n",strlen(name));
 		#endif
+		ESP_LOGE("getid_Dequeue","name=%s\n",name);
+		ESP_LOGE("getid_Dequeue","p->name=%s\n",p->name);
 		if(strncmp(name,(const char *)p->name,strlen(name)) == 0){
 			id = p->conn_id;
 			#ifdef dbg
@@ -217,7 +219,6 @@ uint16_t getid_Dequeue(const char *name)
 }
 char *getname_Dequeue(uint16_t conn_id)
 {
-	//char *name;
 	static struct ble_name_mac *p=NULL;
 	p = ble_namecuappDequeue();
 	while(p != NULL){
@@ -230,8 +231,23 @@ char *getname_Dequeue(uint16_t conn_id)
 		}
 		p = p->next;
 	}
+	return NULL;
+}
+
+uint8_t *getmac_Dequeue(const char *name)
+{
+	static struct ble_name_mac *p=NULL;
+	p = ble_namecuappDequeue();
+	while(p != NULL){
+		if(strncmp(name,(const char *)p->name,strlen(name)) == 0){
+			return p->mac;
+		}
+		p = p->next;
+	}
+	return NULL;
 	
 }
+
 
 
 

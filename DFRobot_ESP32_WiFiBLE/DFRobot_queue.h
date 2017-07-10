@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+//#define dbg
 struct blemsgBuf{
         struct blemsgBuf *next;
         uint16_t handle;
@@ -43,6 +44,7 @@ void recevice_data(uint8_t * buf, uint16_t len);
 void ble_name_idEequeue(uint8_t *new_mac,uint16_t new_connid);
 char *getname_Dequeue(uint16_t conn_id);
 uint16_t getid_Dequeue(const char *name);
+uint8_t *getmac_Dequeue(const char *name);
 extern void cuappEnqueue(uint8_t *pbuf,uint16_t len,uint16_t conn_id);
 extern struct blemsgBuf *cuappDequeue( void );
 extern void wificuappEnqueue(uint8_t *pbuf,uint16_t len,uint16_t conn_id);

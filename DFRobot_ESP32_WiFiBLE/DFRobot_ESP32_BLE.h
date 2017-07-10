@@ -39,6 +39,8 @@ class DFRobot_ESP32_BLE{
 		void setconnectname1(String str);
 		void setconnectname2(String str);
 		void setconnectname3(String str);
+		bool connected(const char* name);
+		String scanname(void);
 		void writedata(const char *name,char data);
 		void writedata(const char *name,char *buf);
 		void writedata(const char *name,int data);
@@ -49,7 +51,12 @@ class DFRobot_ESP32_BLE{
 		//void writedata(const char *name,String str);
         void begin(void);
 		void init(void);
+		bool initdone(void);
+		void scan(void);
+		void stop_scan(void);
+		bool status(String str);
         void end(void);
+		
     private:
         //String connet_name;
     private:
