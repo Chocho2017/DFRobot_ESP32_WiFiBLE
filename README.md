@@ -1,47 +1,80 @@
-Grove - LCD RGB Backlight
----------------------------------------------------------
+# DFRobot_ESP32_WiFiBLE
+This library is based on ESP32 master BLE applications. It can connect 4 slave devices at the same time, and can connect different Bluetooth through setting different service ID. At the same time, an example of combining WiFi and BLE is also given.
 
-### Change Color of Backlight
-One of Grove - LCD RGB Backlight's most important feature is changing the backlight color. It's very simple; just use the folowing function:
+## Installation
+Download the directory "DFRobot_ESP32_WiFiBLE » and move it into the "libraries" directory inside your sketchbook directory, then restart the Arduino IDE. You will then see it listed under File->Examples->DFRobot_ESP32_WiFiBLE.
 
-    void setRGB(int r, int g, int b);
+## Usage
+The library is instantiated as an object with BLE provided to read and write data from BLE. 
+    #include "DFRobot_ESP32_BLE.h"
+    DFRobot_ESP32_BLE ble;
+  
+## void setService(uint16_t ser)
+    Setting up peripheral service ID.
+
+Example:
+
+    ble.setService(0xdfb0);
+
+0xdfb0 is the serive ID for Bluno, so you can connect Bluno.
+
+## void setCharacteristic(uint16_t cha)
+Setting up peripheral Characteristic.
+
+Example:
+
+    ble.setCharacteristic(0xdfb1);
+
+0xdfb0 is the Characteristic number for Bluno, so you can connect Bluno.
+
+## void setconnummax(uint8_t max)
+Sets the number of connections from the machine
+
+Example:
+
+    ble.setconnummax(2);
+
+The max conncect number is 2.
+
+## void setconnectname0(String str)
+Setting up peripheral's name,which serive will connected.
+
+Example:
+
+    ble.setconnectname0("Bluno0");
 
 
-### Clear display
+## void init()
+Initalize ESP32 BLE device.
 
-You can clear the display by this function:
+Example:
 
-    void clear();
+    ble.init();
+   
+## void begin()
+Start running Bluetooth device
 
+Example:
 
-### Turn on and turn off display
+    ble.begin();
 
-    void noDisplay();			// turn off display
-    void display();				// turn on display
+## String readdata(char *buf)
+Read data from BLE.
 
-### Blink
+Example:
 
-    void stopBlink();
-    void blink();
+    char dataName[15] = {'\0'};
+    String bledata = ble.readdata(dataName);
 
-### Cursor
-
-    void noCursor();
-    void cursor();
-
-### Blink LED Backlight
-
-    void blinkLED();
-    void noBlinkLED();
-
-
-* @n [Get the module here](等上架后添加商品购买链接)
+* @n [Get the module here](https://www.dfrobot.com/product-1590.html)
 * @n This example Set the volume size and play music snippet.
-* @n [Connection and Diagram](等上架后添加wiki链接)
+* @n [Connection and Diagram](https://www.dfrobot.com/wiki/index.php/FireBeetle_ESP32_IOT_Microcontroller_(Supports_Wi-Fi_%26_Bluetooth)_SKU:_DFR0478)
 *
 * Copyright	[DFRobot](http://www.dfrobot.com), 2016
 * Copyright	GNU Lesser General Public License
 *
-* @author [yangyang](971326313@qq.com)
+* @author [Chocho](215656823@qq.com)
 * version  V1.0
 * date  2017-2-10
+
+		
